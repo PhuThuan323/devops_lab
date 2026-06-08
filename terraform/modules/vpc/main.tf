@@ -1,13 +1,12 @@
 # VPC
 resource "aws_vpc" "this" {
   cidr_block = var.cidr
-
-  tags = {
-    Name = "demo-vpc"
-  }
+    tags = {
+        Name = "demo-vpc"
+    }
 }
 
-# Internet Gateway
+# Internet Gateway - kết nối với public subnet 
 resource "aws_internet_gateway" "igw" {
   vpc_id = aws_vpc.this.id
 
@@ -16,7 +15,7 @@ resource "aws_internet_gateway" "igw" {
   }
 }
 
-# Public Subnet
+# Public Subnet - kết nối với internet gateway
 resource "aws_subnet" "public" {
   vpc_id                  = aws_vpc.this.id
   cidr_block              = var.public_subnet
@@ -27,7 +26,7 @@ resource "aws_subnet" "public" {
   }
 }
 
-# Private Subnet
+# Private Subnet - sử dụng NAT Gateway để kết nối ra ngoài
 resource "aws_subnet" "private" {
   vpc_id     = aws_vpc.this.id
   cidr_block = var.private_subnet
